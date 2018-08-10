@@ -8,6 +8,7 @@ class MyHTMLParser(HTMLParser):
         self.start_tag = ""
         self.end_tag = ""
         self.data = []
+        self.hashtags = []
 
     def handle_starttag(self, tag, attrs):
         self.start_tag = tag
@@ -20,6 +21,9 @@ class MyHTMLParser(HTMLParser):
             data = data.strip()
             data = re.sub("[(){}.,|>]", '', data)
             data = " ".join(data.split())
+            tags = re.findall("(#[A-Za-z0-9_-]+)", data)
+            if tags:
+                self.hashtags.extend(tags)
             if data:
                 self.data.append(data)
 
@@ -27,3 +31,4 @@ class MyHTMLParser(HTMLParser):
 # parser = MyHTMLParser()
 # parser.feed(requests.get("http://iqbalhossain.info").text)
 # print(parser.data)
+# print(parser.hashtags)
