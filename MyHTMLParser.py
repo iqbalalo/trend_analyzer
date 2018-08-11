@@ -1,5 +1,4 @@
 from html.parser import HTMLParser
-import requests
 import re
 
 class MyHTMLParser(HTMLParser):
@@ -17,7 +16,7 @@ class MyHTMLParser(HTMLParser):
             if len(attrs)>=2 and 'keyword' in attrs[0] and 'content' in attrs[1]:
                 keys = self.clean_data(attrs[1][1])
                 self.metakeywords.extend(keys.split())
-
+        
     def handle_endtag(self, tag):
         self.end_tag = tag
 
@@ -32,13 +31,8 @@ class MyHTMLParser(HTMLParser):
     
     def clean_data(self, data):
         data = data.strip()
-        data = re.sub("[(){}.,|>]", '', data)
+        data = re.sub("[(){}.,|>'+*~]", '', data)
+        data = re.sub(r'"', '', data)
+        data = re.sub("([0-9-]+)", '', data)
         data = " ".join(data.split())
         return data
-
-# instantiate the parser and fed it some HTML
-parser = MyHTMLParser()
-parser.feed(requests.get("http://iqbalhossain.info").text)
-# print(parser.data)
-print(parser.hashtags)
-print(parser.metakeywords)
