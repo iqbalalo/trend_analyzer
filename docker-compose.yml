@@ -1,0 +1,35 @@
+version: '3.6'
+
+services:
+
+  # Postgres db service
+  pgdb:
+    image: postgres:9.6.8
+    environment:
+      POSTGRES_PASSWORD: Admin123
+      POSTGRES_DB: flask_app_db
+    ports:
+      - "5432:5432"
+    
+  # Postgres db service for his side
+  pgdb2:
+    image: postgres:9.6.8
+    environment:
+      POSTGRES_PASSWORD: His123
+      POSTGRES_DB: his_db
+    ports:
+      - "5434:5432"
+
+  # DB admin web interface    
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+  
+  # App service
+  # app:
+  #   build: .
+  #   ports:
+  #     - "5000:80"
+  #   depends_on:
+  #     - pgdb
